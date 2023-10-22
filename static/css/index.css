@@ -1,0 +1,97 @@
+:root {
+  --mutual-padding-vertical:3px;
+  --mutual-padding-horizontal: 3px;
+  --button-bg-color: rgb(255, 151, 168);
+  --mutual-width: 300px;
+}
+
+* {
+  font-size: 1.1rem;
+  color: white;
+  margin: 0;
+}
+
+body {
+  background: #000;
+  color: white;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+form {
+  margin-left: 8px;
+}
+
+input {
+  max-width: var(--mutual-width);
+  height: 30px;
+  color: black;
+
+  font-size: 1.1em;
+  
+  margin-bottom: 10px;
+  padding: var(--mutual-padding-vertical) var(--mutual-padding-horizontal);
+}
+
+button {
+  background-color: var(--button-bg-color);
+
+  max-width: calc(var(--mutual-width) + 10px);
+  height: 40px;
+
+  font-size: 1.1em;
+  cursor: pointer;
+
+  padding: var(--mutual-padding-vertical) var(--mutual-padding-horizontal);
+}
+
+a {
+  color: rgb(0, 242, 255);
+}
+
+.add-btn {
+  background-color: green;
+}
+
+.remove-btn {
+  background-color: red;
+}
+
+.col-container {
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 30px;
+}
+
+.row-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.splited-screen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.underlining {
+  border-bottom: 2px solid lightcyan;
+  width: 80%;
+}
+
+.riba-logo {
+  background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff80, #0080ff, #8000ff, #ff00ff);
+
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+
+  width: 97%;
+  border-radius: 2px;
+
+  font-size: 2em;
+  font-weight: bold;
+
+  margin-bottom: 30px;
+  margin-right: 20px;
+}

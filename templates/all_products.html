@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/css/index.css">
+  <title>Document</title>
+</head>
+<body>
+  
+  <div class="splited-screen">
+
+    <div>
+      <h1>From lowest price</h1>
+      {% for product in from_lowest_list %}
+      <div class="col-container underlining">
+        Product: {{product.name}} Price: {{product.price}}
+      </div>
+      {% endfor %}
+    </div>
+
+
+    <div>
+      <h1>From highest price</h1>
+      {% for product in from_highest_list %}
+      <div class="col-container underlining">
+        Product: {{product.name}} Price: {{product.price}}
+      </div>
+      {% endfor %}
+    </div>
+    
+  </div>
+
+
+
+</body>
+</html>
