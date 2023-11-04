@@ -95,3 +95,9 @@ a {
   margin-bottom: 30px;
   margin-right: 20px;
 }
+
+img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+}

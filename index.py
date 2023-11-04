@@ -17,6 +17,7 @@ app = Flask("gluhaya_riba")
 
 @app.route("/")
 def main():
+    providers = get_providers_products()[0]
     return render_template("index.html", providers=providers)
 
 
@@ -44,8 +45,8 @@ def action():
         if item_type == "product":
             if todo == "adding":
                 cursor.execute("""
-                INSERT INTO Products (PROVIDER_ID, NAME, PRICE) VALUES (?, ?, ?)
-                """, (request.args["prov"], request.args["prod"], request.args["price"]))
+                INSERT INTO Products (PROVIDER_ID, NAME, PRICE, IMAGE) VALUES (?, ?, ?, ?)
+                """, (request.args["prov"], request.args["prod"], request.args["price"], request.args["image"]))
 
             elif todo == "removing":
                 cursor.execute(f"""
@@ -81,7 +82,7 @@ def all():
         cursor.execute("""
         SELECT * FROM Products
         """)
-        products = [Product(item[0], item[1], item[2], item[3]) for item in cursor.fetchall()]
+        products = [Product(item[0], item[1], item[2], item[3], item[4]) for item in cursor.fetchall()]
         prices_list = [product.price for product in products]
         
         sorted_list = sorted(prices_list)

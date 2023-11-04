@@ -10,6 +10,11 @@
 <body>
   <div class="riba-logo">Riba proj</div>
   
+  <a href="/">home</a>
+  <a href="/control">control</a>
+  <a href="/all">all product</a>
+
+
   {% for i in providers%}
     <a href="/provider/{{i.id}}"><p> {{ i.name }} </p></a>
   {% endfor %}

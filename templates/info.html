@@ -8,8 +8,15 @@
   <title>Document</title>
 </head>
 <body>
+
+  <a href="/">home</a>
+
+  <div>  
     {% for item in provider.product_list %} 
-      {{item.name}} <br> 
+    {{item.name}}
+    <img src="../static/images/{{item.image}}"> <br>
     {% endfor %}
+  </div>
+
   </body>
 </html>

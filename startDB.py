@@ -14,7 +14,9 @@ def get_providers_products():
       cursor.execute("""
       SELECT * FROM Products 
       """)
-      products = [Product(item[0], item[1], item[2], item[3]) for item in cursor.fetchall()]
+
+      
+      products = [Product(item[0], item[1], item[2], item[3], item[4]) for item in cursor.fetchall()]
 
       for provider in providers: 
           for product in products:
