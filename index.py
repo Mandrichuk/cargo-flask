@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 
 from provider_class import Provider
@@ -37,10 +37,10 @@ def action():
     todo = request.args.get("todo")
     item_type = request.args.get("item_type")
 
-    key_word = "added" if todo == "adding" else "removed"
 
     with sqlite3.connect("Cargo.db") as connect:
         cursor = connect.cursor()
+
 
         if item_type == "product":
             if todo == "adding":
@@ -55,8 +55,7 @@ def action():
                 """)
 
             update_data(providers, products)
-            return render_template("action.html", name=request.args["prod"], item_type=item_type, key_word=key_word)
-        
+            
 
         if item_type == "provider":
             if todo == "adding":
@@ -66,12 +65,26 @@ def action():
 
             elif todo == "removing":
                 cursor.execute(f"""
-                DELETE FROM Providers
+                SELECT * FROM Providers
                 WHERE Name = "{request.args["prov"]}"
                 """)
 
+                providers = cursor.fetchall()
+
+                cursor.execute(f"""
+                DELETE FROM Providers
+                WHERE Name = "{providers[0][1]}"
+                """)
+
+                cursor.execute(f"""
+                DELETE FROM Products
+                WHERE PROVIDER_ID = "{providers[0][0]}"
+                """)
+
+
             update_data(providers, products)
-            return render_template("action.html", name=request.args["prov"], item_type=item_type, key_word=key_word)
+
+        return redirect(url_for('all'))
 
 
 @app.route("/all")
