@@ -8,16 +8,22 @@
   <title>Document</title>
 </head>
 <body>
-  <div class="riba-logo">Riba proj</div>
   
   <a href="/">home</a>
-  <a href="/control">control</a>
-  <a href="/all">all product</a>
-  <a href="/pricerange">price range</a>
 
 
-  {% for i in providers%}
-    <a href="/provider/{{i.id}}"><p> {{ i.name }} </p></a>
-  {% endfor %}
+  <div>
+    <h1>Products from {{min_price}} to {{max_price}} (prices)</h1>
+    {% for product in range_products %}
+    <img src="../static/images/{{product.image}}">
+    <div class="col-container underlining">
+      Product: {{product.name}} Price: {{product.price}}
+    </div>
+    {% endfor %}
+  </div>
+
+
+
+
 </body>
 </html>

@@ -34,6 +34,10 @@ def control():
 
 @app.route("/action")
 def action():
+    global providers
+    global products
+
+
     todo = request.args.get("todo")
     item_type = request.args.get("item_type")
 
@@ -44,9 +48,16 @@ def action():
 
         if item_type == "product":
             if todo == "adding":
-                cursor.execute("""
-                INSERT INTO Products (PROVIDER_ID, NAME, PRICE, IMAGE) VALUES (?, ?, ?, ?)
-                """, (request.args["prov"], request.args["prod"], request.args["price"], request.args["image"]))
+                
+                is_in_list = False
+                for product in products:
+                    if product.name == request.args["prod"]:
+                        is_in_list = True
+
+                if not is_in_list:
+                    cursor.execute("""
+                    INSERT INTO Products (PROVIDER_ID, NAME, PRICE, IMAGE) VALUES (?, ?, ?, ?)
+                    """, (request.args["prov"], request.args["prod"], request.args["price"], request.args["image"]))
 
             elif todo == "removing":
                 cursor.execute(f"""
@@ -59,28 +70,24 @@ def action():
 
         if item_type == "provider":
             if todo == "adding":
-                cursor.execute("""
-                INSERT INTO Providers (NAME, PHONE) VALUES (?, ?)
-                """, (request.args["prov"], request.args["phone"]))
+                
+                is_in_list = False
+                for product in products: 
+                    if product.name == request.args["prod"]:
+                        is_in_list = True
+
+                if not is_in_list:
+                    cursor.execute("""
+                    INSERT INTO Providers (NAME, PHONE) VALUES (?, ?)
+                    """, (request.args["prov"], request.args["phone"]))
 
             elif todo == "removing":
-                cursor.execute(f"""
-                SELECT * FROM Providers
-                WHERE Name = "{request.args["prov"]}"
-                """)
-
-                providers = cursor.fetchall()
+                cursor.execute('PRAGMA foreign_keys = ON;')
 
                 cursor.execute(f"""
                 DELETE FROM Providers
-                WHERE Name = "{providers[0][1]}"
+                WHERE Name = "{request.args["prov"]}";
                 """)
-
-                cursor.execute(f"""
-                DELETE FROM Products
-                WHERE PROVIDER_ID = "{providers[0][0]}"
-                """)
-
 
             update_data(providers, products)
 
@@ -106,6 +113,40 @@ def all():
 
 
     return render_template("all_products.html", from_lowest_list=from_lowest_list, from_highest_list=from_highest_list)
+
+
+@app.route("/pricerange")
+def pricerange():
+    return render_template("pricerange.html")
+
+
+@app.route("/rangedproducts")
+def rangedlist():
+    global providers
+    global products
+
+    range_products = []
+
+    min_price = int(request.args["min"])
+    max_price = int(request.args["max"])
+   
+    with sqlite3.connect("Cargo.db") as connect:
+        cursor = connect.cursor()
+
+        cursor.execute("""
+        SELECT * FROM Products
+        """)
+        products = [Product(item[0], item[1], item[2], item[3], item[4]) for item in cursor.fetchall()]
+
+        for product in products:
+            if product.price >= min_price and product.price <= max_price:
+                range_products.append(product)
+
+        
+        print(product.name for product in range_products)
+
+    return render_template("rangedproducts.html", range_products=range_products, min_price=min_price, max_price=max_price)
+
 
 
 
