@@ -70,7 +70,6 @@ def action():
 
         if item_type == "provider":
             if todo == "adding":
-                
                 is_in_list = False
                 for product in products: 
                     if product.name == request.args["prod"]:
@@ -148,7 +147,65 @@ def rangedlist():
     return render_template("rangedproducts.html", range_products=range_products, min_price=min_price, max_price=max_price)
 
 
+@app.route("/generatecart")
+def generatecart():
+    return render_template("generatecart.html")
+
+@app.route("/getcart")
+def getcart():
+    budget = int(request.args["budget"])
+    already_spent = 0
+    cart = []
+
+    with sqlite3.connect("Cargo.db") as connect:
+        cursor = connect.cursor()
+
+        cursor.execute("""
+        SELECT * FROM Products
+        """)
+        products = [Product(item[0], item[1], item[2], item[3], item[4]) for item in cursor.fetchall()]
+
+        for product in products:
+            if product.price <= budget - already_spent:
+                cart.append(product)
+                already_spent += product.price
+
+
+    return render_template("getcart.html", budget=budget, cart=cart)
+
+# @app.route("/upp")
+# def upp():
+#     with sqlite3.connect("Cargo.db") as connect:
+#         cursor = connect.cursor()
+#         # cursor.execute("""UPDATE Products
+#         #                 SET Price = 6, Name="BestApple"
+#         #                 WHERE Name = "APPLE"
+#         #                """)
+        
+
+        
+#         return cursor.execute("SELECT Name, Price * 2 FROM Products").fetchall()
+    
+
+@app.route("/use_inflation")
+def use_inflation():
+    return render_template("use_inflation.html")
+
+
+@app.route("/updateprice")
+def updateprice():
+    use_inflation = int(request.args["bottom_range"])
+
+    with sqlite3.connect("Cargo.db") as connect: 
+        cursor = connect.cursor()
+
+        cursor.execute(f"""
+            UPDATE Products
+            SET Price = 30
+            WHERE Name = "ORANGE"
+            """)
+    return cursor.execute("SELECT Name, Price FROM Products").fetchall()
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True) 
